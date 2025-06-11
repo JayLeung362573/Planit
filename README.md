@@ -1,5 +1,15 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=19670535&assignment_repo_type=AssignmentRepo)
 
+- User triggers /github issues owner/repo → Slack → your server.
+- Server queries GitHub’s API and returns results back to Slack.
+- GitHub pushes events → Slack via your server → Slack channel subscribers.
+- This means the website/middleware acts as a central hub, orchestrating:
+
+Incoming Slack commands,
+Outgoing GitHub API requests,
+GitHub webhook event handling,
+Outgoing Slack notifications.
+
 - ************************************************** 1 ****************************************
 ✅ API A: GitHub API
 1.	Paginated Queries: View repositories, issues, and pull requests, with pagination support.
