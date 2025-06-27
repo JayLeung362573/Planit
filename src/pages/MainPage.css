@@ -1,0 +1,44 @@
+.pink-background {
+  min-height: 100vh;
+  background: pink;
+}
+
+.background-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;       /* Adjust height as needed */
+  font-size: 2rem;     /* Adjust font size as needed */
+  color: #fff;    
+  font-weight: bold; 
+}
+
+.openai-result-box {
+  background: #529ad0 !important;
+  color: #fff !important;
+  margin: 32px auto 24px auto;
+  padding: 24px;
+  border-radius: 14px;
+  font-size: 1.13rem;
+  max-width: 600px;
+  min-height: 80px;
+}
+
+.plan-input-area {
+  min-height: 180px;
+  width: 100%;
+  max-width: 500px;
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255,255,255,0.13);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  padding: 24px;
+  z-index: 10;
+}
+
