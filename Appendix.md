@@ -8,6 +8,8 @@ Per person, we will list our contributions to this project chronologically.
 - Added M0 AI declaration form
 - Submitted M0
 - Created M1 doc on google drive, outline for submission
+- Added M1 AI declaration
+- Presented Data flow diagram for M1 video
 
 # Diego
 - Wrote group contract
@@ -17,6 +19,8 @@ Per person, we will list our contributions to this project chronologically.
 - Added M0 AI declaration form
 - Completed the Paid API agreement for M0
 - Created data flow map for M1
+- Added M1 AI declaration
+- Presented prototype for M1 video
 
 # Jiwei
 - Developed User flow diagram for M0
@@ -24,9 +28,13 @@ Per person, we will list our contributions to this project chronologically.
 - Added M0 AI declaration form
 - Created filesystem for repo
 - Added interactive wireframe through react.js
+- Added M1 AI declaration
+- Presented APIs for M1 video
 
 # Nahum
 - Added user stories, personas for M0
 - Added M0 AI declaration form
 - Made risk assessment for M1
 - Created appendix for M1
+- Added M1 AI declaration
+- Presented Overview, editted for M1 video
