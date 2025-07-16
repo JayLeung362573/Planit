@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="/assets/scripts/app.js" defer></script>
+  <title>Daily Schedule</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/assets/css/schedule.css" />
+</head>
+<body>
+    <nav class="navbar">
+    <a href="index.html" class="logo">PLAN IT</a>
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="favorites.html">Favorites</a></li>
+        <li><a href="schedule.html">My schedule</a></li>
+        <li><a href="schedule.html">Sales</a></li>
+        <li><a href="schedule.html">About Us</a></li>
+    </ul>
+    <a href="/assets/docs/diego-salazar-resume.pdf" class="btn-download" download>
+        Login
+    </a>
+    </nav>
+  <main>
+    <section class="schedule-section">
+      <h2>Today’s Schedule</h2>
+      <div class="schedule-container">
+
+        <div class="schedule-item">
+          <div class="time">7:30 AM – 8:15 AM</div>
+          <h3 class="activity-title">Morning Yoga</h3>
+          <div class="item-meta">☀️ 18 °C • Clear</div>
+          <p class="short-expl">Gentle flow to energize your morning.</p>
+          <div class="item-footer">
+            <span class="detail">💲 Free</span>
+            <span class="detail">🎒 Mat, Water</span>
+          </div>
+          <button class="button done-button"><span>Done</span></button>
+        </div>
+
+        <div class="schedule-item">
+          <div class="time">9:00 AM – 10:30 AM</div>
+          <h3 class="activity-title">City Bike Tour</h3>
+          <div class="item-meta">🌤 22 °C • Partly Cloudy</div>
+          <p class="short-expl">Explore downtown landmarks by bike.</p>
+          <div class="item-footer">
+            <span class="detail">💲 $20 rental</span>
+            <span class="detail">🎒 ID, Helmet</span>
+          </div>
+          <button class="button done-button"><span>Done</span></button>
+        </div>
+
+        <div class="schedule-item">
+          <div class="time">12:00 PM – 1:00 PM</div>
+          <h3 class="activity-title">Lunch at Café Verde</h3>
+          <div class="item-meta">☀️ 24 °C • Sunny</div>
+          <p class="short-expl">Healthy farm-to-table meal.</p>
+          <div class="item-footer">
+            <span class="detail">💲 ~$25 pp</span>
+            <span class="detail">🎒 Wallet, Sunglasses</span>
+          </div>
+          <button class="button done-button"><span>Done</span></button>
+        </div>
+
+        <div class="schedule-item">
+          <div class="time">2:00 PM – 3:30 PM</div>
+          <h3 class="activity-title">MoMA Visit</h3>
+          <div class="item-meta">☁️ 20 °C • Cloudy</div>
+          <p class="short-expl">Contemporary art exhibitions.</p>
+          <div class="item-footer">
+            <span class="detail">💲 $18 ticket</span>
+            <span class="detail">🎒 ID, Camera</span>
+          </div>
+          <button class="button done-button"><span>Done</span></button>
+        </div>
+
+        <div class="schedule-item">
+          <div class="time">5:00 PM – 6:00 PM</div>
+          <h3 class="activity-title">Park Stroll</h3>
+          <div class="item-meta">🌥 19 °C • Overcast</div>
+          <p class="short-expl">Relaxing walk by the lake.</p>
+          <div class="item-footer">
+            <span class="detail">💲 Free</span>
+            <span class="detail">🎒 Light Jacket</span>
+          </div>
+          <button class="button done-button"><span>Done</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="feedback-modal">
+    <div class="modal-content">
+      <button class="modal-close">&times;</button>
+      <p class="feedback-question">How was your experience?</p>
+      <div class="rating-stars">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+      </div>
+      <textarea class="comment-box" placeholder="Leave a note about your experience…" rows="3"></textarea>
+      <div class="modal-actions">
+        <button class="favorite-button">🤍 Add to favorites</button>
+        <button class="save-button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+</body>
+</html>
