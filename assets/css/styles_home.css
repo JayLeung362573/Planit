@@ -387,11 +387,19 @@ body.weather-clear {
 }
 
 body.weather-clouds {
-    background: linear-gradient(120deg, #bdc3c7 0%, #2c3e50 100%);
+  background: linear-gradient(-45deg, #bdc3c7, #2c3e50, #7f8c8d, #a8b6c8);
+  background-size: 400% 400%;
+  animation: gradientMove 10s ease infinite;
 }
 
-body.weather-rain {
-    background: linear-gradient(120deg, #636363 0%, #a2ab58 100%);
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+body.weather-rain .rain {
+  display: block;
 }
 
 body.weather-snow {
@@ -408,4 +416,15 @@ body.weather-drizzle {
 
 body.weather-mist {
     background: linear-gradient(120deg, #d7d2cc 0%, #304352 100%);
+}
+
+#weather-video {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  pointer-events: none; /* So users can click through it */
+  opacity: 0.7;         /* Adjust for brightness */
+  background: black;    /* Fallback if video fails to load */
 }

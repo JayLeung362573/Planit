@@ -141,49 +141,78 @@ const OPENWEATHERMAP_API_KEY = 'add3419a98924f4bde7188bc3f457a65';
 const lat = 49.2827;
 const lon = -123.1207;
 
+let lastWeather = null;
+
 async function setWeatherBackground() {
     try {
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHERMAP_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
+        const video = document.getElementById('weather-video');
+        let src = '';
+
+        const now = data.dt;
+        const sunrise = data.sys.sunrise;
+        const sunset = data.sys.sunset;
         const weather = data.weather[0].main.toLowerCase();
+        // const weather = "thunderstorm";
+
+        console.log('Weather API response liang:', data);
+        console.log('Weather condition jiawei:', weather);
+        console.log("Weather description:", data.weather[0].description);
 
         // Remove old weather classes if any
-        document.body.classList.remove('weather-clear', 'weather-rain', 'weather-clouds', 'weather-snow', 'weather-thunderstorm', 'weather-drizzle', 'weather-mist');
+        document.body.classList.remove('weather-clear', 'weather-rain', 'weather-clouds', 
+          'weather-snow', 'weather-thunderstorm', 'weather-drizzle', 'weather-mist');
         
-        // Add new class based on weather
         switch (weather) {
             case 'clear':
+                src = '/assets/videos/clear.mp4';
                 document.body.classList.add('weather-clear');
                 break;
             case 'rain':
+                if (now >= sunrise) {
+                    src = '/assets/videos/rain-morning.mp4';
+                } else{
+                    // After sunset or before sunrise = evening
+                    src = '/assets/videos/rain-evening.mp4';
+                }
                 document.body.classList.add('weather-rain');
                 break;
             case 'clouds':
+                src = '/assets/videos/clouds.mp4';
                 document.body.classList.add('weather-clouds');
                 break;
             case 'snow':
+                src = '/assets/videos/snow.mp4';
                 document.body.classList.add('weather-snow');
                 break;
             case 'thunderstorm':
+                src = '/assets/videos/thunderstorm.mp4';
                 document.body.classList.add('weather-thunderstorm');
                 break;
             case 'drizzle':
+                src = '/assets/videos/drizzle.mp4';
                 document.body.classList.add('weather-drizzle');
                 break;
-            case 'mist':
             case 'fog':
+                src = '/assets/videos/fog.mp4';
                 document.body.classList.add('weather-mist');
                 break;
             default:
-                // fallback
+                src = '/assets/videos/clear.mp4';
                 document.body.classList.add('weather-clear');
+        }if (video && src) {
+            // For local testing, use absolute URLs if needed
+            if (video && src && weather !== lastWeather) {
+            video.src = src;
+            lastWeather = weather;
+          }
         }
     } catch (error) {
         console.error('Failed to set weather background:', error);
     }
 }
-
 document.addEventListener('DOMContentLoaded', setWeatherBackground);
 
 
