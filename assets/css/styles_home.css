@@ -125,12 +125,7 @@ body{
     margin: 0px;
 }
 
-.montserrat-<uniquifier> {
-  font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-}
+/* Removed invalid .montserrat-<uniquifier> block */
 
 .sub-first{
     margin: 3px;
@@ -383,4 +378,34 @@ ul {
 .example-2 .icon-content a[data-social="youtube"] .filled,
 .example-2 .icon-content a[data-social="youtube"] ~ .tooltip {
   background-color: #ff0000;
+}
+
+
+
+body.weather-clear {
+    background: linear-gradient(120deg, #fceabb 0%, #f8b500 100%);
+}
+
+body.weather-clouds {
+    background: linear-gradient(120deg, #bdc3c7 0%, #2c3e50 100%);
+}
+
+body.weather-rain {
+    background: linear-gradient(120deg, #636363 0%, #a2ab58 100%);
+}
+
+body.weather-snow {
+    background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+}
+
+body.weather-thunderstorm {
+    background: linear-gradient(120deg, #141e30 0%, #243b55 100%);
+}
+
+body.weather-drizzle {
+    background: linear-gradient(120deg, #3a7bd5 0%, #3a6073 100%);
+}
+
+body.weather-mist {
+    background: linear-gradient(120deg, #d7d2cc 0%, #304352 100%);
 }

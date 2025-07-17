@@ -135,6 +135,57 @@ document.addEventListener('DOMContentLoaded', () => {
   showMsg(0);
 });
 
+const OPENWEATHERMAP_API_KEY = 'add3419a98924f4bde7188bc3f457a65';
+
+// You can use Vancouver, or get user geolocation if needed
+const lat = 49.2827;
+const lon = -123.1207;
+
+async function setWeatherBackground() {
+    try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHERMAP_API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const weather = data.weather[0].main.toLowerCase();
+
+        // Remove old weather classes if any
+        document.body.classList.remove('weather-clear', 'weather-rain', 'weather-clouds', 'weather-snow', 'weather-thunderstorm', 'weather-drizzle', 'weather-mist');
+        
+        // Add new class based on weather
+        switch (weather) {
+            case 'clear':
+                document.body.classList.add('weather-clear');
+                break;
+            case 'rain':
+                document.body.classList.add('weather-rain');
+                break;
+            case 'clouds':
+                document.body.classList.add('weather-clouds');
+                break;
+            case 'snow':
+                document.body.classList.add('weather-snow');
+                break;
+            case 'thunderstorm':
+                document.body.classList.add('weather-thunderstorm');
+                break;
+            case 'drizzle':
+                document.body.classList.add('weather-drizzle');
+                break;
+            case 'mist':
+            case 'fog':
+                document.body.classList.add('weather-mist');
+                break;
+            default:
+                // fallback
+                document.body.classList.add('weather-clear');
+        }
+    } catch (error) {
+        console.error('Failed to set weather background:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', setWeatherBackground);
+
 
 
 
