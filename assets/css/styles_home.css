@@ -1,0 +1,430 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0d0d0d;
+  padding: 0 40px;
+  height: 60px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.navbar .logo {
+  color: greenyellow;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.navbar .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar .nav-links a {
+  color: lightgray;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navbar .nav-links a:hover {
+  color: #ffffff;
+}
+
+.navbar .btn-download {
+  display: inline-block;
+  padding: 8px 20px;
+  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.navbar .btn-download:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.navbar .btn-download:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 20px;
+  }
+  .navbar .nav-links {
+    width: 100%;
+    justify-content: center;
+    margin: 15px 0;
+  }
+}
+
+.title{
+    font-family: Montserrat, 'Times New Roman', Times, serif;
+    color: whitesmoke;
+    font-weight: 900;
+    font-size: xx-large;
+    text-align: center;
+
+}
+
+a{
+  text-decoration: none;
+  outline: none;
+}
+
+.li-hover a,
+.li-hover a:visited,
+.li-hover a:hover,
+.li-hover a:active,
+.li-hover a:focus {
+  color: inherit;        
+  text-decoration: none; 
+}
+
+
+.subtitles{
+    font-family: Montserrat, 'Times New Roman', Times, serif;
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+    font-size: x-small;
+    text-align: center;
+    margin-top: 0;
+
+}
+
+.subtitles2{
+    font-family: Montserrat, 'Times New Roman', Times, serif;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    font-size: medium;
+    text-align: start;
+    margin-top: 0;
+    position: relative;
+    z-index: 3;
+    padding-bottom: 800px;
+    color: greenyellow;
+
+}
+
+body{
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0px;
+}
+
+/* Removed invalid .montserrat-<uniquifier> block */
+
+.sub-first{
+    margin: 3px;
+    color: lightgray;
+}
+
+.sub-second{
+    margin: 3px;
+    color: greenyellow;
+}
+
+#main-title{
+    margin: 20px;
+}
+
+.hero{
+    border-bottom: 2px #2E2532 solid;
+    padding: 200px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+li{
+    font-family: Montserrat, 'Times New Roman', Times, serif;
+    font-weight: 500;
+    color: lightgray;
+    list-style-type: none;
+}
+
+.padding-ul{
+    padding: 10px 0px;
+}
+
+.text-align{
+    text-align: center;
+}
+
+#pp-goal{
+    margin: 20px;
+}
+
+.footer{
+    padding: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+.follow-me{
+    font-family: Montserrat, 'Times New Roman', Times, serif;
+    font-weight: 500;
+    color: lightgray;
+    padding-left: 75px;
+    padding-bottom: 20px;
+}
+
+.rest-footer{
+    padding-top: 85px;
+    font-family: Montserrat, 'Times New Roman', Times, serif;
+    font-weight: 500;
+    color: lightgray;
+    padding-right: 40px;
+    margin: 10px;
+}
+
+.hero-footer{
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px #2E2532 solid;
+}
+
+.li-hover:hover{
+    color: greenyellow;
+}
+
+.flex-box{
+    display: flex;
+}
+
+input::placeholder {
+  font-family: Montserrat, 'Times New Roman', Times, serif;
+  font-size: 15px;
+  color: #888888;
+  font-style: italic;
+}
+
+textarea.multiline {
+  resize: none;
+  overflow: hidden;
+}
+
+/* From Uiverse.io by adamgiebl */ 
+.input {
+  font-family: Montserrat, 'Times New Roman', Times, serif;
+  color: #fff;
+  font-size: 16px;
+  background-color: transparent;
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline: 0.5em;
+  padding-block: 0.7em;
+  border: none;
+  border-bottom: var(--border-height) solid var(--border-before-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input-border {
+  position: absolute;
+  background: var(--border-after-color);
+  width: 0%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input:focus + .input-border {
+  width: 100%;
+}
+
+.form-control {
+  position: relative;
+  --width-of-input: 300px;
+}
+
+.input-alt {
+  width: 400px;
+  font-size: 16px;
+  padding-inline: 1em;
+  padding-block: 0.8em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input-border-alt {
+  height: 3px;
+  background: linear-gradient(90deg, #FF6464 0%, #FFBF59 50%, #47C9FF 100%);
+  transition: width 0.4s cubic-bezier(0.42, 0, 0.58, 1.00);
+}
+
+.input-alt:focus + .input-border-alt {
+  width: 100%;
+}
+
+.input-main{
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+
+/* From Uiverse.io by wilsondesouza */ 
+ul {
+  list-style: none;
+}
+
+.example-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.example-2 .icon-content {
+  margin: 0 10px;
+  position: relative;
+}
+.example-2 .icon-content .tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 5px;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+.example-2 .icon-content:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: -50px;
+}
+.example-2 .icon-content a {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: #4d4d4d;
+  background-color: black;
+  transition: all 0.3s ease-in-out;
+}
+.example-2 .icon-content a:hover {
+  box-shadow: 3px 2px 45px 0px rgb(0 0 0 / 12%);
+}
+.example-2 .icon-content a svg {
+  position: relative;
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+}
+.example-2 .icon-content a:hover {
+  color: white;
+}
+.example-2 .icon-content a .filled {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: #000;
+  transition: all 0.3s ease-in-out;
+}
+.example-2 .icon-content a:hover .filled {
+  height: 100%;
+}
+
+.example-2 .icon-content a[data-social="linkedin"] .filled,
+.example-2 .icon-content a[data-social="linkedin"] ~ .tooltip {
+  background-color: #0274b3;
+}
+
+.example-2 .icon-content a[data-social="github"] .filled,
+.example-2 .icon-content a[data-social="github"] ~ .tooltip {
+  background-color: #24262a;
+}
+.example-2 .icon-content a[data-social="instagram"] .filled,
+.example-2 .icon-content a[data-social="instagram"] ~ .tooltip {
+  background: linear-gradient(
+    45deg,
+    #405de6,
+    #5b51db,
+    #b33ab4,
+    #c135b4,
+    #e1306c,
+    #fd1f1f
+  );
+}
+.example-2 .icon-content a[data-social="youtube"] .filled,
+.example-2 .icon-content a[data-social="youtube"] ~ .tooltip {
+  background-color: #ff0000;
+}
+
+
+
+body.weather-clear {
+    background: linear-gradient(120deg, #fceabb 0%, #f8b500 100%);
+}
+
+body.weather-clouds {
+  background: linear-gradient(-45deg, #bdc3c7, #2c3e50, #7f8c8d, #a8b6c8);
+  background-size: 400% 400%;
+  animation: gradientMove 10s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+body.weather-rain .rain {
+  display: block;
+}
+
+body.weather-snow {
+    background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+}
+
+body.weather-thunderstorm {
+    background: linear-gradient(120deg, #141e30 0%, #243b55 100%);
+}
+
+body.weather-drizzle {
+    background: linear-gradient(120deg, #3a7bd5 0%, #3a6073 100%);
+}
+
+body.weather-mist {
+    background: linear-gradient(120deg, #d7d2cc 0%, #304352 100%);
+}
+
+#weather-video {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  pointer-events: none; /* So users can click through it */
+  opacity: 0.7;         /* Adjust for brightness */
+  background: black;    /* Fallback if video fails to load */
+}
