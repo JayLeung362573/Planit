@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "homepage": "http://localhost:3001",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test"
