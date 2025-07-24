@@ -9,9 +9,9 @@
     />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles_home.css" />
-    <script src="./App.js" defer></script>
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <link rel="stylesheet" href="src/assets/css/styles-home.css" />
+    <script src="src/App.js" defer></script>
+    <!-- <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"> -->
     <title>Home</title>
 </head>
 <body>
@@ -52,22 +52,41 @@
                 Personalized itineraries based on live weather
             </h2>
         </div>
-        <div class="input-main">
-            <div class="form-control">
+        <form id="info-form" action="loader.html" method="GET">
+            <div class="input-main">
+                <div class="form-control">
                 <textarea
-                id="user-input"
-                class="input input-alt multiline"
-                placeholder="Try it: I want a relaxing, low-budget beach day"
-                rows="1"
-                required
+                    id="user-input"
+                    class="input input-alt multiline"
+                    placeholder="Try it: I want a relaxing, low-budget beach day"
+                    rows="1"
+                    required
                 ></textarea>
                 <span class="input-border input-border-alt"></span>
+                </div>
+                <button id="save-btn" type="submit" disabled>
+                Save My Info
+                </button>
             </div>
-        </div>
-    </div>
+        </form>
+        <script>
+            const textarea = document.getElementById('user-input');
+            const saveBtn = document.getElementById('save-btn');
+            const form = document.getElementById('info-form');
+
+            textarea.addEventListener('input', function() {
+                saveBtn.disabled = !textarea.value.trim();
+            });
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const text = textarea.value.trim();
+                alert("You entered: " + text);
+                window.location.href = "loader.html";
+            });
+        </script>
 
     <video id="weather-video" autoplay muted loop playsinline></video>
-
 
 
     <!-- Footer  -->
@@ -223,6 +242,7 @@
                 </li>
             </div>
         </div> 
+    </div>
 
 </body>
 </html>

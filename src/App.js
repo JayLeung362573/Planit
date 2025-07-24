@@ -1,4 +1,5 @@
-import './assets/css/styles_home.css';export default function App() {
+import './assets/css/styles_home.css';
+export default function App() {
   return <img src={logo} alt="Logo" />;
 }
 document.addEventListener('DOMContentLoaded', () => {
@@ -185,6 +186,7 @@ async function setWeatherBackground() {
             case 'clouds':
                 src = '/assets/videos/clouds.mp4';
                 document.body.classList.add('weather-clouds');
+                console.log('Trying to load video:', src);
                 break;
             case 'snow':
                 src = '/assets/videos/snow.mp4';
@@ -193,6 +195,7 @@ async function setWeatherBackground() {
             case 'thunderstorm':
                 src = '/assets/videos/thunderstorm.mp4';
                 document.body.classList.add('weather-thunderstorm');
+                console.log('Trying to load video:', src);
                 break;
             case 'drizzle':
                 src = '/assets/videos/drizzle.mp4';
@@ -206,7 +209,6 @@ async function setWeatherBackground() {
                 src = '/assets/videos/clear.mp4';
                 document.body.classList.add('weather-clear');
         }if (video && src) {
-            // For local testing, use absolute URLs if needed
             if (video && src && weather !== lastWeather) {
             video.src = src;
             lastWeather = weather;
