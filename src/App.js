@@ -1,4 +1,3 @@
-import React from 'react';
 import './assets/css/styles_home.css';export default function App() {
   return <img src={logo} alt="Logo" />;
 }
