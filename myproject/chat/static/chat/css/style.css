@@ -1,0 +1,243 @@
+/* ─── Base ─────────────────────────────────────────────────────── */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f7f8fa;
+  color: #333;
+  padding: 2rem;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* ─── Form & Inputs ───────────────────────────────────────────── */
+form {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+.autocomplete {
+  position: relative;
+}
+.autocomplete-items {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  z-index: 10;
+}
+.autocomplete-item {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.autocomplete-item:hover {
+  background: #f0f0f0;
+}
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+}
+.error-msg {
+  color: #d9534f;
+  margin: 0.5rem 0;
+}
+button {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+button:not(:disabled):hover {
+  background: #0056b3;
+}
+
+/* ─── Flatpickr ─────────────────────────────────────── */
+.flatpickr-calendar {
+  width: 280px !important;
+  font-size: 14px;
+  margin-top: 4px;
+}
+.flatpickr-calendar .flatpickr-months,
+.flatpickr-calendar .flatpickr-weekdays {
+  background-color: #fff !important;
+  border-bottom: 1px solid #eee;
+}
+.flatpickr-calendar .flatpickr-months .flatpickr-month,
+.flatpickr-calendar .flatpickr-months .flatpickr-prev-month,
+.flatpickr-calendar .flatpickr-months .flatpickr-next-month {
+  color: #333 !important;
+}
+.flatpickr-day {
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.flatpickr-day:hover {
+  background: #e6f0ff;
+}
+.flatpickr-day.selected {
+  background: #007bff !important;
+  color: #fff !important;
+}
+.flatpickr-footer {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+.flatpickr-footer button {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.flatpickr-footer button:hover {
+  background: #0056b3;
+}
+.flatpickr-day.today:not(.selected) {
+  background: none !important;
+  color: #333 !important;
+}
+
+/* ─── Hourly Forecast ─────────────────────────────────────────── */
+.hourly-forecast {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+.hourly-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+  gap: 1rem;
+}
+.hourly-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 0.75rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  text-align: center;
+}
+.hour-label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.hour-emoji {
+  font-size: 1.5rem;
+}
+.hour-temp {
+  font-size: 1.2rem;
+  margin: 0.25rem 0;
+}
+.hour-desc {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* ─── Schedule Page ───────────────────────────────────────────── */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 1rem;
+  margin: 2rem auto;
+  max-width: 900px;
+}
+.schedule-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  text-align: left;
+}
+.card-time {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.card-location {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.card-weather,
+.card-cost {
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+.card-description {
+  font-size: 0.875rem;
+  color: #555;
+}
+.back-btn {
+  display: block;
+  width: fit-content;
+  margin: 2rem auto;
+  padding: 0.6rem 1.2rem;
+  background: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.back-btn:hover {
+  background: #0056b3;
+}
+.no-activities {
+  text-align: center;
+  color: #666;
+}
+
+/* ─── Card Hover & Transition ───────────────────────────────────────────────── */
+.schedule-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.schedule-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+
+/* ─── Cost Styling ─────────────────────────────────────────────────────────────── */
+.card-cost {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+/* Tier-specific colors */
+.cost-free      { color: #28a745; background: rgba(40,167,69,0.1); }
+.cost-cheap     { color: #007bff; background: rgba(0,123,255,0.1); }
+.cost-moderate  { color: #ffc107; background: rgba(255,193,7,0.1); }
+.cost-expensive { color: #dc3545; background: rgba(220,53,69,0.1); }
+
+
+/* ─── Capitalize Weather Descriptions ───────────────────────── */
+.card-weather {
+  text-transform: capitalize;
+}

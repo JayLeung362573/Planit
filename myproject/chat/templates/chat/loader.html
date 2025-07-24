@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Just a moment…</title>
+  <link rel="stylesheet" href="{% static 'chat/css/style.css' %}"/>
+  <style>
+    .spinner {
+      width: 60px; height: 60px;
+      border: 6px solid #eee;
+      border-top: 6px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 100px auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <p class="loading-text">Generating your schedule…</p>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "{{ generate_url }}";
+    }, 100);
+  </script>
+</body>
+</html>

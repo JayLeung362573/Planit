@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Plan Your Day</title>
+
+  <!-- Flatpickr CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+  />
+  <!-- Main styles -->
+  <link rel="stylesheet" href="{% static 'chat/css/style.css' %}"/>
+</head>
+<body>
+  <h1>Plan Your Day</h1>
+
+  <form id="plan-form"
+        method="post"
+        action="{% url 'loader_view' %}">
+    {% csrf_token %}
+
+    <label for="location-input">Location:</label>
+    <div class="autocomplete">
+      <input
+        type="text"
+        id="location-input"
+        name="location"
+        placeholder="Detecting location…"
+        autocomplete="off"
+      />
+      <div id="location-suggestions" class="autocomplete-items"></div>
+    </div>
+
+    <label for="date-input">Date:</label>
+    <input
+      type="text"
+      id="date-input"
+      name="date"
+      placeholder="DD/MM/YYYY"
+      autocomplete="off"
+    />
+
+    <input
+      type="hidden"
+      id="hourly-forecast-input"
+      name="hourly_forecast_input"
+      value=""
+    />
+
+    <label for="prompt">Preferences (e.g. “outdoorsy, cheap, 3 activities”):</label>
+    <textarea
+      id="prompt"
+      name="prompt"
+      rows="3"
+      placeholder="e.g. I want 4 outdoorsy activities for a family"
+      disabled
+    ></textarea>
+
+    <div id="error-msg" class="error-msg"></div>
+    <button id="send-btn" type="submit" disabled>Generate Schedule</button>
+  </form>
+
+  <div id="hourly-forecast" class="hourly-forecast"></div>
+
+  <script>window.OWM_KEY = "{{ owm_key|escapejs }}";</script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
+  <script src="{% static 'chat/js/location.js' %}"></script>
+</body>
+</html>

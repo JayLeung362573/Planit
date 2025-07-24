@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Your Day’s Schedule</title>
+  <link rel="stylesheet" href="{% static 'chat/css/style.css' %}"/>
+</head>
+<body>
+  <h1>Schedule for {{ date }} in {{ location }}</h1>
+
+  <div class="schedule-grid">
+    {% for act in activities %}
+      <div class="schedule-card">
+        <div class="card-time">{{ act.time }}</div>
+        <div class="card-location">{{ act.location }}</div>
+        <div class="card-weather">{{ act.expected_weather }}</div>
+        <div class="card-description">{{ act.description }}</div>
+
+        {% with act.cost|lower as c %}
+          {% if c == 'free' %}
+            <div class="card-cost cost-free">Free</div>
+          {% elif c == 'cheap' %}
+            <div class="card-cost cost-cheap">$</div>
+          {% elif c == 'moderate' %}
+            <div class="card-cost cost-moderate">$$</div>
+          {% elif c == 'expensive' %}
+            <div class="card-cost cost-expensive">$$$</div>
+          {% else %}
+            <div class="card-cost">{{ act.cost }}</div>
+          {% endif %}
+        {% endwith %}
+
+      </div>
+    {% empty %}
+      <p class="no-activities">No activities to show.</p>
+    {% endfor %}
+  </div>
+
+  <a href="{% url 'chat_view' %}" class="back-btn">Plan Again</a>
+
+  <!-- External JS for time formatting & weather capitalization -->
+  <script src="{% static 'chat/js/schedule.js' %}"></script>
+</body>
+</html>
