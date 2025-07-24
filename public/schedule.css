@@ -1,0 +1,373 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0d0d0d;
+  padding: 0 40px;
+  height: 60px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.navbar .logo {
+  color: greenyellow;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.navbar .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar .nav-links a {
+  color: lightgray;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navbar .nav-links a:hover {
+  color: #ffffff;
+}
+
+.navbar .btn-download {
+  display: inline-block;
+  padding: 8px 20px;
+  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.navbar .btn-download:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.navbar .btn-download:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 20px;
+  }
+  .navbar .nav-links {
+    width: 100%;
+    justify-content: center;
+    margin: 15px 0;
+  }
+}
+
+
+
+:root {
+  --accent:      #4FC3F7;;
+  --btn-done:   #555;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: #111;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+header h1 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+main {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+.schedule-section h2 {
+  color: #fff;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.schedule-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.schedule-item {
+  position: relative;
+  background: #111;
+  padding: 1rem;
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+}
+.schedule-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.7);
+}
+
+.schedule-item.done {
+  opacity: 0.5;
+  border-left-color: #555;
+}
+.schedule-item.done .activity-title {
+  color: #777;
+  text-decoration: line-through;
+}
+
+.time {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.activity-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.item-meta {
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+.short-expl {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+
+.item-footer {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+.item-footer .detail {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* From Uiverse.io by nima-mollazadeh (smaller sizing) */
+.button {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  text-decoration: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.button span {
+  position: relative;
+  z-index: 1;
+  text-transform: none;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: #272727;
+  border-radius: 7px;
+  transition: 0.5s;
+}
+.button:hover::before {
+  opacity: 0.7;
+}
+
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  background: inherit;
+  border-radius: 7px;
+  transition: 0.5s;
+  opacity: 0;
+  filter: blur(20px);
+}
+.button:hover::after {
+  opacity: 1;
+}
+
+.schedule-item.done .button {
+  background: var(--btn-done);
+  color: #ccc;
+}
+.schedule-item.done .button span {
+  text-decoration: line-through;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed; top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.8);
+  justify-content: center; align-items: center;
+  z-index: 1000;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal-content {
+  position: relative;
+  background: #222;
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 90%; max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.modal-close {
+  position: absolute; top: 0.5rem; right: 0.5rem;
+  background: none; border: none;
+  font-size: 1.5rem; color: #fff;
+  cursor: pointer;
+}
+
+.feedback-question {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.rating-stars .star {
+  font-size: 1.5rem;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.rating-stars .star.filled {
+  color: #eab308;
+}
+
+.comment-box {
+  width: 90%;          
+  max-width: 360px;      
+  margin: 1rem auto;    
+  padding: 0.75rem;
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-family: 'Montserrat', sans-serif;
+  resize: none;         
+  height: 80px;          
+  box-sizing: border-box;
+}
+
+
+.favorite-button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s;
+}
+.favorite-button.favorited {
+  color: #e91e63;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.favorite-button {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.favorite-button.favorited {
+  color: #e91e63;
+}
+.save-button {
+  background: none;
+  border: 1px solid #555;
+  color: #ccc;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.save-button:hover {
+  background: #333;
+  color: #fff;
+}
+
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  font-size: 0.9rem;
+  z-index: 1100;
+}
+.toast.show {
+  opacity: 1;
+}
+
+
+
+
+
+
