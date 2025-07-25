@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --save-dev jest @babel/core @babel/preset-env babel-jest
 
       - name: Run tests
         run: npm test
