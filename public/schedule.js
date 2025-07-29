@@ -16,3 +16,13 @@ document.querySelectorAll('.rating-stars .star').forEach(star => {
     });
   });
 });
+
+const favBtn = document.querySelector('.favorite-button');
+favBtn.addEventListener('click', function() {
+  favBtn.classList.toggle('favorited');
+  if (favBtn.classList.contains('favorited')) {
+    favBtn.textContent = '❤️ Added to favorites';
+  } else {
+    favBtn.textContent = '🤍 Add to favorites';
+  }
+});
