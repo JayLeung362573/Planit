@@ -7,3 +7,12 @@ document.querySelectorAll('.done-button').forEach(btn => {
 document.querySelector('.modal-close').addEventListener('click', function() {
   document.getElementById('feedback-modal').classList.remove('active');
 });
+
+document.querySelectorAll('.rating-stars .star').forEach(star => {
+  star.addEventListener('click', function() {
+    const value = parseInt(this.getAttribute('data-value'));
+    document.querySelectorAll('.rating-stars .star').forEach(s => {
+      s.classList.toggle('filled', parseInt(s.getAttribute('data-value')) <= value);
+    });
+  });
+});
