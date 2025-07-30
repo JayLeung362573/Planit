@@ -22,6 +22,9 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_ASSISTANT_ID = os.getenv('OPENAI_ASSISTANT_ID')
 OWM_KEY  = os.getenv('OWM_KEY')
+PLACES_API_KEY = os.getenv("PLACES_API_KEY")
+REFLECTION_ASSISTANT_ID = os.getenv("REFLECTION_ASSISTANT_ID")
+HELPER_ASSISTANT_ID = os.getenv("HELPER_ASSISTANT_ID")
 
 
 # Quick-start development settings - unsuitable for production

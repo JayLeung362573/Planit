@@ -1,46 +1,292 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Your Day’s Schedule</title>
-  <link rel="stylesheet" href="{% static 'chat/css/style.css' %}"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schedule for {{ date }}</title>
+  {% load static %}
+  <style>
+    body { font-family:sans-serif; margin:0; padding:1rem; background:#f0f4f8 }
+    h1 { text-align:center; margin-bottom:1rem }
+    .schedule-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1rem }
+    .schedule-card { background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); display:flex; flex-direction:column }
+    .card-header, .card-footer { padding:.75rem; background:#fafafa; display:flex; justify-content:space-between; align-items:center }
+    .card-details { padding:.75rem; flex:1 }
+    .btn { cursor:pointer; border:none; border-radius:4px; padding:.5rem 1rem }
+    .btn-complete { background:#10b981; color:#fff }
+    .btn-undo     { background:#f59e0b; color:#fff }
+    .feedback-display { padding:.75rem; border-top:1px solid #eee }
+    .hidden { display:none!important }
+
+    /* Feedback Modal */
+    .modal { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; justify-content:center; align-items:center }
+    .modal-content { background:#fff; padding:1.5rem; border-radius:8px; width:90%; max-width:400px; text-align:center; position:relative }
+    .rating-stars span { font-size:2rem; cursor:pointer; color:#ccc; margin:0 .2rem }
+    .rating-stars .selected { color:#fbbf24 }
+    textarea { width:100%; height:80px; margin:.75rem 0; padding:.5rem; border:1px solid #ccc; border-radius:4px }
+
+    /* Loader panel */
+    #loader-panel { position:absolute; top:1rem; right:1rem; background:#fff; border:1px solid #ccc; border-radius:4px; padding:.5rem; display:flex; align-items:center; gap:.5rem; box-shadow:0 2px 4px rgba(0,0,0,0.1) }
+    #loader-panel .loader-text { font-size:.9rem; color:#333 }
+    #loader-cancel { background:#ef4444; color:#fff; border:none; border-radius:4px; padding:.25rem .5rem; cursor:pointer; font-size:.8rem }
+
+    /* Summary sections */
+    .day-summary { font-size:1.1rem; margin:1rem 0; color:#333 }
+    .reflections, .accomplishments, .next-step { margin:1rem 0; text-align:left }
+    .reflections h3, .accomplishments h3, .next-step h3 { margin-bottom:.5rem; color:#555 }
+    #accomplishments-list { list-style:none; padding-left:1.2rem }
+    #accomplishments-list li { margin:.25rem 0; position:relative; padding-left:1rem }
+    #accomplishments-list li::before { content:'•'; position:absolute; left:0; color:#10b981 }
+    pre { text-align:left; background:#f7fafc; padding:.5rem; border-radius:4px; max-height:200px; overflow:auto }
+
+    /* AI Helper under grid */
+    .ai-helper { margin: 2rem 0; text-align:center; }
+    .ai-helper input { width: 70%; padding:.5rem; border:1px solid #ccc; border-radius:4px; margin-right:.5rem; }
+    .ai-helper button { padding:.5rem 1rem; }
+    .helper-reply { margin-top:.75rem; background:#f7fafc; border-left:4px solid #3b82f6; padding:.5rem; border-radius:4px; text-align:left; }
+  </style>
 </head>
 <body>
-  <h1>Schedule for {{ date }} in {{ location }}</h1>
+  <h1>📅 Your Schedule for {{ date }} at {{ location }}</h1>
 
   <div class="schedule-grid">
     {% for act in activities %}
-      <div class="schedule-card">
-        <div class="card-time">{{ act.time }}</div>
-        <div class="card-location">{{ act.location }}</div>
-        <div class="card-weather">{{ act.expected_weather }}</div>
-        <div class="card-description">{{ act.description }}</div>
-
-        {% with act.cost|lower as c %}
-          {% if c == 'free' %}
-            <div class="card-cost cost-free">Free</div>
-          {% elif c == 'cheap' %}
-            <div class="card-cost cost-cheap">$</div>
-          {% elif c == 'moderate' %}
-            <div class="card-cost cost-moderate">$$</div>
-          {% elif c == 'expensive' %}
-            <div class="card-cost cost-expensive">$$$</div>
-          {% else %}
-            <div class="card-cost">{{ act.cost }}</div>
-          {% endif %}
-        {% endwith %}
-
+    <div class="schedule-card">
+      <div class="card-header">
+        <span class="time">🕒 {{ act.time }}</span>
+        <span class="loc">📍 {{ act.location }}</span>
       </div>
-    {% empty %}
-      <p class="no-activities">No activities to show.</p>
+      <div class="card-details">
+        <p>📝 {{ act.description }}</p>
+        <p>☁️ {{ act.expected_weather }} | 💲 {{ act.cost }} | ⭐ {{ act.rating }} | 🚪 {{ act.open_now|yesno:"Open Now,Closed" }}</p>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-complete">✅ Complete</button>
+        <button class="btn btn-undo hidden">↩️ Undo</button>
+      </div>
+      <div class="feedback-display hidden">
+        <p class="feedback-stars"></p>
+        <p class="feedback-comment"></p>
+      </div>
+    </div>
     {% endfor %}
   </div>
 
-  <a href="{% url 'chat_view' %}" class="back-btn">Plan Again</a>
+  <!-- AI Helper under the grid -->
+  <div class="ai-helper">
+    <h3>💬 Ask AI about your activities</h3>
+    <input id="helper-question" type="text" placeholder="e.g. What should I bring for the hike?" />
+    <button id="helper-send" class="btn">Ask AI</button>
+    <div id="helper-reply" class="helper-reply hidden"></div>
+  </div>
 
-  <!-- External JS for time formatting & weather capitalization -->
-  <script src="{% static 'chat/js/schedule.js' %}"></script>
+  <!-- Feedback Modal -->
+  <div id="feedback-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Rate and Review</h3>
+      <div class="rating-stars">
+        <span data-value="1">☆</span><span data-value="2">☆</span>
+        <span data-value="3">☆</span><span data-value="4">☆</span>
+        <span data-value="5">☆</span>
+      </div>
+      <textarea id="feedback-text" placeholder="Leave your feedback..."></textarea>
+      <button id="feedback-cancel" class="btn">Cancel</button>
+      <button id="feedback-submit" class="btn btn-complete">Submit</button>
+    </div>
+  </div>
+
+  <!-- Summary + Reflection Modal -->
+  <div id="summary-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>🎉 Summary of Your Day!</h2>
+
+      <!-- Loader panel -->
+      <div id="loader-panel" class="hidden">
+        <span class="loader-text">Building summary…</span>
+        <button id="loader-cancel">Cancel</button>
+      </div>
+
+      <p id="day-summary" class="day-summary"></p>
+      <section class="reflections">
+        <h3>🤔 Reflections</h3>
+        <p id="day-reflections"></p>
+      </section>
+      <section class="accomplishments">
+        <h3>✅ What You Accomplished</h3>
+        <ul id="accomplishments-list"></ul>
+      </section>
+      <section class="next-step">
+        <h3>🚀 Next Step</h3>
+        <p id="next-step"></p>
+      </section>
+
+      <button id="close-summary" class="btn btn-close-summary">Close</button>
+    </div>
+  </div>
+
+  <!-- CSRF helper -->
+  <script>
+    function getCookie(name) {
+      const v = document.cookie.match('(^|;)\\s*'+name+'\\s*=\\s*([^;]+)');
+      return v ? v.pop() : '';
+    }
+    const csrftoken = getCookie('csrftoken');
+  </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards         = Array.from(document.querySelectorAll('.schedule-card'));
+    const feedbackModal = document.getElementById('feedback-modal');
+    const summaryModal  = document.getElementById('summary-modal');
+    const loaderPanel   = document.getElementById('loader-panel');
+    const cancelLoader  = document.getElementById('loader-cancel');
+    const closeSummary  = document.getElementById('close-summary');
+    const daySummary    = document.getElementById('day-summary');
+    const dayRefl       = document.getElementById('day-reflections');
+    const accomList     = document.getElementById('accomplishments-list');
+    const nextStep      = document.getElementById('next-step');
+    const helperInput   = document.getElementById('helper-question');
+    const helperBtn     = document.getElementById('helper-send');
+    const helperReply   = document.getElementById('helper-reply');
+
+    if (cards.length > 0) {
+      helperBtn.addEventListener('click', () => {
+        const q = helperInput.value.trim();
+        if (!q) return;
+        helperReply.textContent = '🤖 Thinking…';
+        helperReply.classList.remove('hidden');
+        // … the rest of your fetch logic …
+      });
+    } else {
+      // No cards → disable inputs
+      helperInput.disabled = true;
+      helperBtn.disabled   = true;
+      helperSection.style.opacity = '0.5';
+    }
+
+    let completedCount = 0, currentCard = null, rating = 0, abortCtrl = null;
+
+    function openFeedback(card) {
+      currentCard = card; rating = 0;
+      feedbackModal.querySelectorAll('.rating-stars span').forEach(s=>s.classList.remove('selected'));
+      document.getElementById('feedback-text').value = '';
+      feedbackModal.classList.remove('hidden');
+    }
+    function closeFeedback() { feedbackModal.classList.add('hidden'); }
+
+    cards.forEach(card => {
+      const btnC = card.querySelector('.btn-complete');
+      const btnU = card.querySelector('.btn-undo');
+      const fbD  = card.querySelector('.feedback-display');
+
+      btnC.onclick = () => { if (!card.classList.contains('completed')) openFeedback(card); };
+      btnU.onclick = () => {
+        card.classList.remove('completed');
+        card.querySelector('.btn-complete').classList.remove('hidden');
+        btnU.classList.add('hidden');
+        fbD.classList.add('hidden');
+        completedCount = Math.max(0, completedCount - 1);
+        if (abortCtrl) { abortCtrl.abort(); loaderPanel.classList.add('hidden'); }
+      };
+    });
+
+    feedbackModal.querySelectorAll('.rating-stars span').forEach(star=>{
+      star.onclick = () => {
+        rating = +star.dataset.value;
+        feedbackModal.querySelectorAll('.rating-stars span')
+          .forEach(s=>s.classList.toggle('selected', +s.dataset.value <= rating));
+      };
+    });
+
+    document.getElementById('feedback-cancel').onclick = closeFeedback;
+    document.getElementById('feedback-submit').onclick = () => {
+      if (!currentCard) return;
+      closeFeedback();
+      currentCard.classList.add('completed');
+      currentCard.querySelector('.btn-complete').classList.add('hidden');
+      currentCard.querySelector('.btn-undo').classList.remove('hidden');
+      const fs = currentCard.querySelector('.feedback-stars');
+      const fc = currentCard.querySelector('.feedback-comment');
+      fs.textContent = '⭐'.repeat(rating);
+      fc.textContent = document.getElementById('feedback-text').value || 'No comment';
+      currentCard.querySelector('.feedback-display').classList.remove('hidden');
+      completedCount++;
+      if (completedCount === cards.length) startReflection();
+    };
+
+    cancelLoader.onclick = () => {
+      if (abortCtrl) abortCtrl.abort();
+      loaderPanel.classList.add('hidden');
+    };
+
+    function startReflection() {
+      summaryModal.classList.remove('hidden');
+      loaderPanel.classList.remove('hidden');
+
+      const activities = cards.map(c=>({
+        time:        c.querySelector('.time').textContent.replace('🕒 ','').trim(),
+        location:    c.querySelector('.loc').textContent.replace('📍 ','').trim(),
+        description: c.querySelector('.card-details p').textContent.trim(),
+        rating:      c.querySelector('.feedback-stars').textContent.length,
+        feedback:    c.querySelector('.feedback-comment').textContent.trim()
+      }));
+
+      abortCtrl = new AbortController();
+      fetch('{% url "reflect_view" %}', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json','X-CSRFToken':csrftoken },
+        body: JSON.stringify({ activities }),
+        signal: abortCtrl.signal
+      })
+      .then(r=>r.json())
+      .then(data=>{
+        loaderPanel.classList.add('hidden');
+        daySummary.textContent = data.summary;
+        dayRefl.textContent    = data.reflections;
+        accomList.innerHTML    = data.accomplishments.map(i=>`<li>${i}</li>`).join('');
+        nextStep.textContent   = data.next_step;
+      })
+      .catch(()=>{
+        loaderPanel.classList.add('hidden');
+        daySummary.textContent = 'Reflection cancelled or error.';
+      });
+    }
+    
+
+    // AI Helper
+    helperBtn.onclick = () => {
+      const q = helperInput.value.trim();
+      if (!q) return;
+      helperReply.textContent = '🤖 Thinking…';
+      helperReply.classList.remove('hidden');
+      const activities = cards.map(c=>({
+        time:        c.querySelector('.time').textContent.replace('🕒 ','').trim(),
+        location:    c.querySelector('.loc').textContent.replace('📍 ','').trim(),
+        description: c.querySelector('.card-details p').textContent.trim(),
+        rating:      c.querySelector('.feedback-stars').textContent.length,
+        feedback:    c.querySelector('.feedback-comment').textContent.trim()
+      }));
+      fetch('{% url "helper_view" %}', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json','X-CSRFToken':csrftoken },
+        body: JSON.stringify({ question:q, activities })
+      })
+      .then(r=>r.json())
+      .then(d=>{
+        helperReply.textContent = d.reply || 'No answer.';
+      })
+      .catch(()=>{
+        helperReply.textContent = 'Error contacting helper.';
+      });
+    };
+
+    closeSummary.onclick = () => summaryModal.classList.add('hidden');
+    window.onclick = e => {
+      if (e.target===feedbackModal) closeFeedback();
+      if (e.target===summaryModal) summaryModal.classList.add('hidden');
+    };
+  });
+  
+  </script>
 </body>
 </html>
