@@ -1,243 +1,588 @@
-/* ─── Base ─────────────────────────────────────────────────────── */
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f7f8fa;
-  color: #333;
-  padding: 2rem;
-}
-h1 {
-  text-align: center;
-  margin-bottom: 2rem;
+/* ============================== */
+/* style.css - Clean Dark Neon UI with refined Flatpickr */
+/* ============================== */
+
+/* ---- Theme Variables ---- */
+:root {
+  --bg: #000000;
+  --text-primary: #f5f7ff;
+  --text-secondary: #bfc4d9;
+  --text-muted: #7a7c9c;
+
+  --accent-green: #b3ff33;
+  --accent-purple: #7c5cff;
+  --accent-light: #a68cff;
+
+  --input-bg: #1a1a2f;
+  --radius: 14px;
+
+  --border-light: rgba(255,255,255,0.06);
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ─── Form & Inputs ───────────────────────────────────────────── */
-form {
-  max-width: 600px;
-  margin: 0 auto 2rem;
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+/* ---- Reset / Base ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
-label {
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+img {
+  max-width: 100%;
   display: block;
-  font-weight: 600;
-  margin-top: 1rem;
 }
-.autocomplete {
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover {
+  color: var(--accent-light);
+}
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+/* ---- Utilities ---- */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============================== */
+/* Navbar                        */
+/* ============================== */
+.navbar {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* logo left, links fill rest */
+  padding: 0 1rem;
+  height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.logo {
+  font-weight: 900;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  color: var(--accent-green);
+  text-decoration: none;
+  margin-right: 2rem; /* give links some breathing room */
+}
+
+.nav-links {
+  font-size: 1.4rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  list-style: none;
+  justify-content: space-evenly;
+  padding: 0;
+  display: flex;
+  flex: 1;                       /* take up all leftover space */ /* spread links evenly */
+  align-items: center;
+}
+
+.nav-links a {
   position: relative;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 10px 6px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color .3s;
 }
-.autocomplete-items {
+
+.nav-links a::after {
+  content: "";
   position: absolute;
-  top: 100%;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent-purple);
+  transition: all .3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-purple);
+}
+
+.nav-links a:hover::after {
   left: 0;
-  right: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-top: none;
-  z-index: 10;
+  width: 100%;                  /* underline grows from center to edges */
 }
-.autocomplete-item {
-  padding: 0.5rem;
-  cursor: pointer;
+
+
+
+/* ============================== */
+/* Hero / Header                 */
+/* ============================== */
+.hero {
+  padding: 100px 16px 10px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.autocomplete-item:hover {
-  background: #f0f0f0;
+.title {
+  max-width: 800px;
+  margin: 0 auto 10px; /* tighter grouping with subtitles, some gap before form */
+}
+#main-title {
+  font-size: clamp(2.5rem, 6vw, 3.6rem);
+  font-weight: 800;
+  margin: 0 0 2px;
+  line-height: 1.05;
+  color: var(--text-primary);
+  letter-spacing: .5px;
+}
+.subtitles {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 0;
+  text-align: center;
+}
+.sub-first {
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0 4px;
+}
+
+/* ============================== */
+/* Form                          */
+/* ============================== */
+#plan-form {
+  margin: 30px auto 0;
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 36px 32px;
+  background: transparent;
+  border-radius: 16px;
+  position: relative;
+  border: 1px solid var(--border-light);
+  backdrop-filter: blur(2px);
+}
+#plan-form label {
+  display: block;
+  font-size: .65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.form-row {
+  display: flex;
+  gap: 26px;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+.input-wrapper {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 input[type="text"],
 textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 0.25rem;
+  background: var(--input-bg);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 16px 18px;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border var(--transition), box-shadow var(--transition);
+  font-family: inherit;
+  resize: vertical;
 }
-.error-msg {
-  color: #d9534f;
-  margin: 0.5rem 0;
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
 }
-button {
-  width: 100%;
-  margin-top: 1.5rem;
-  padding: 0.75rem;
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-button:not(:disabled):hover {
-  background: #0056b3;
+input:focus,
+textarea:focus,
+#send-btn:focus {
+  outline: none;
 }
 
-/* ─── Flatpickr ─────────────────────────────────────── */
-.flatpickr-calendar {
-  width: 280px !important;
-  font-size: 14px;
+#prompt-wrapper textarea {
+  min-height: 140px;
+}
+
+/* Validation states */
+#prompt {
+  background: #1a1a2f;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: border var(--transition), background var(--transition);
+  color: var(--text-primary);
+}
+#prompt.invalid {
+  border: 1px solid #ff6b6b;
+  background: rgba(255,107,107,0.06);
+}
+#prompt.valid {
+  border: 1px solid var(--accent-green);
+  background: rgba(179,255,51,0.05);
+}
+.prompt-hint {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  display: block;
+  color: var(--text-muted);
+}
+.prompt-hint.error {
+  color: #ff6b6b;
+}
+.prompt-hint.ok {
+  color: var(--accent-green);
+}
+
+/* Autocomplete dropdown */
+
+.autocomplete-items:empty {
+  display: none !important;
+  visibility: hidden;
+  height: 0;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.autocomplete-items {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #0f0f2f;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 40;
+}
+.autocomplete-items div {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: .9rem;
+  color: var(--text-primary);
+  transition: background var(--transition);
+}
+.autocomplete-items div:hover,
+.autocomplete-items .selected {
+  background: rgba(124,92,255,0.08);
+}
+
+/* Error message */
+#error-msg {
+  color: #ff6b6b;
+  font-size: .85rem;
   margin-top: 4px;
 }
-.flatpickr-calendar .flatpickr-months,
-.flatpickr-calendar .flatpickr-weekdays {
-  background-color: #fff !important;
-  border-bottom: 1px solid #eee;
-}
-.flatpickr-calendar .flatpickr-months .flatpickr-month,
-.flatpickr-calendar .flatpickr-months .flatpickr-prev-month,
-.flatpickr-calendar .flatpickr-months .flatpickr-next-month {
-  color: #333 !important;
-}
-.flatpickr-day {
-  border-radius: 4px;
-  transition: background 0.2s;
-}
-.flatpickr-day:hover {
-  background: #e6f0ff;
-}
-.flatpickr-day.selected {
-  background: #007bff !important;
-  color: #fff !important;
-}
-.flatpickr-footer {
+
+/* ============================== */
+/* Generate Button               */
+/* ============================== */
+.generate-wrapper {
   display: flex;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  background: #fff;
-  border-top: 1px solid #eee;
+  justify-content: center;
+  margin-top: 8px;
 }
-.flatpickr-footer button {
-  flex: 1;
-  padding: 0.5rem;
-  font-size: 0.875rem;
-  background: #007bff;
+/* From Uiverse.io by Madflows, adapted to your existing selector */
+#send-btn,
+.button { /* keep the original class in case it's reused elsewhere */
+  position: relative;
+  overflow: hidden;
+  font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  height: 3rem;
+  padding: 0 2rem;
+  border-radius: 1.5rem;
+  background: black;
+  background-size: 400%;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15);
   cursor: pointer;
 }
-.flatpickr-footer button:hover {
-  background: #0056b3;
-}
-.flatpickr-day.today:not(.selected) {
-  background: none !important;
-  color: #333 !important;
+
+#send-btn:hover::before,
+.button:hover::before {
+  transform: scaleX(1);
 }
 
-/* ─── Hourly Forecast ─────────────────────────────────────────── */
-.hourly-forecast {
-  max-width: 800px;
-  margin: 2rem auto;
-}
-.hourly-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
-  gap: 1rem;
-}
-.hourly-card {
-  background: #fff;
-  border-radius: 6px;
-  padding: 0.75rem;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
-  text-align: center;
-}
-.hour-label {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-.hour-emoji {
-  font-size: 1.5rem;
-}
-.hour-temp {
-  font-size: 1.2rem;
-  margin: 0.25rem 0;
-}
-.hour-desc {
-  font-size: 0.85rem;
-  color: #555;
+#send-btn .button-content,
+.button .button-content {
+  position: relative;
+  z-index: 1;
 }
 
-/* ─── Schedule Page ───────────────────────────────────────────── */
-.schedule-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 1rem;
-  margin: 2rem auto;
-  max-width: 900px;
+#send-btn::before,
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  width: 100%;
+  height: inherit;
+  border-radius: inherit;
+  background: linear-gradient(
+    rgba(150, 93, 233, 1) 10.8%,
+    rgba(99, 88, 238, 1) 94.3%
+  );
+  transition: all 0.475s;
+  pointer-events: none;
 }
-.schedule-card {
-  background: #fff;
-  border-radius: 6px;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  text-align: left;
+
+/* disabled state: no hover animation, no pointer, muted appearance */
+#send-btn:disabled,
+.button:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
 }
-.card-time {
+
+/* Prevent the gradient overlay from showing when disabled */
+#send-btn:disabled::before,
+.button:disabled::before {
+  transform: scaleX(0) !important;
+  transition: none;
+}
+
+/* Suppress hover-triggered transform or other effects when disabled */
+#send-btn:disabled:hover,
+.button:disabled:hover {
+  transform: none;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15); /* keep the “border” look */
+}
+
+
+
+/* ============================== */
+/* Flatpickr refined styling ---- */
+/* ============================== */
+.flatpickr-calendar {
+  background: #1f1f2f !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 12px;
+  color: #f5f7ff;
+  font-family: inherit;
+  box-shadow: 0 40px 100px -10px rgba(124,92,255,0.35);
+  min-width: 260px;
+  padding: 0;
+}
+
+/* Header: month/year + nav */
+.flatpickr-months {
+  background: #1c1c2b;
+  padding: 14px 16px 8px;
+  position: relative;
+}
+.flatpickr-month {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.flatpickr-current-month,
+.flatpickr-current-month * {
   font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-.card-location {
   font-size: 1rem;
-  margin-bottom: 0.5rem;
+  color: #ffffff !important; /* force white for month/year */
+  text-transform: none;
+  letter-spacing: 0.5px;
 }
-.card-weather,
-.card-cost {
+.flatpickr-months .flatpickr-next-month,
+.flatpickr-months .flatpickr-prev-month {
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.flatpickr-months .flatpickr-next-month svg,
+.flatpickr-months .flatpickr-prev-month svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--accent-green);
+  stroke-width: 2;
+  fill: none;
+}
+.flatpickr-months .flatpickr-next-month:hover,
+.flatpickr-months .flatpickr-prev-month:hover {
+  background: rgba(179,255,51,0.15);
+}
+
+/* Weekday names */
+.flatpickr-weekdays {
+  background: transparent;
+  padding: 4px 0 2px;
+}
+.flatpickr-weekday {
+  color: #ffffff !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.65rem;
+  padding: 4px 0;
+}
+
+/* Days grid */
+.flatpickr-days {
+  padding: 6px 8px 12px;
+}
+.flatpickr-day {
+  background: transparent;
+  border-radius: 8px;
+  margin: 2px;
+  line-height: 1.2;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.9rem;
-  margin-bottom: 0.3rem;
-}
-.card-description {
-  font-size: 0.875rem;
-  color: #555;
-}
-.back-btn {
-  display: block;
-  width: fit-content;
-  margin: 2rem auto;
-  padding: 0.6rem 1.2rem;
-  background: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.back-btn:hover {
-  background: #0056b3;
-}
-.no-activities {
-  text-align: center;
-  color: #666;
+  color: #d8dce8;
+  transition: background var(--transition), box-shadow var(--transition), color var(--transition);
+  position: relative;
 }
 
-/* ─── Card Hover & Transition ───────────────────────────────────────────────── */
-.schedule-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.schedule-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+/* Disabled/out-of-range days: visible but white (muted via opacity) */
+.flatpickr-day.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.02);
 }
 
+/* Hover on selectable */
+.flatpickr-day:hover:not(.disabled):not(.selected) {
+  background: rgba(179,255,51,0.08);
+}
 
-/* ─── Cost Styling ─────────────────────────────────────────────────────────────── */
-.card-cost {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+/* Today */
+.flatpickr-day.today {
+  outline: 2px solid var(--accent-green);
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Selected (solid neon green) */
+.flatpickr-day.selected {
+  background: var(--accent-green) !important;
+  color: #000 !important;
+  box-shadow: 0 0 18px rgba(179,255,51,0.7) !important;
+}
+
+/* Footer (Clear / Today) */
+.flatpickr-footer {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  justify-content: center;
+  background: #1c1c2b;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.flatpickr-footer button {
+  cursor: pointer;
+  background: transparent;
+  border: 2px solid var(--accent-green);
+  color: #f5f7ff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.8rem;
   font-weight: 700;
-  margin-top: 0.5rem;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.flatpickr-footer button:hover {
+  background: rgba(179,255,51,0.15);
+  border-color: var(--accent-green);
+  transform: translateY(-1px);
 }
 
-/* Tier-specific colors */
-.cost-free      { color: #28a745; background: rgba(40,167,69,0.1); }
-.cost-cheap     { color: #007bff; background: rgba(0,123,255,0.1); }
-.cost-moderate  { color: #ffc107; background: rgba(255,193,7,0.1); }
-.cost-expensive { color: #dc3545; background: rgba(220,53,69,0.1); }
+/* ============================== */
+/* Spinner / System Status       */
+/* ============================== */
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 5px solid rgba(255,255,255,0.08);
+  border-top-color: var(--accent-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
+/* ---- Accessibility ---- */
+:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 2px;
+}
 
-/* ─── Capitalize Weather Descriptions ───────────────────────── */
-.card-weather {
-  text-transform: capitalize;
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+  #plan-form {
+    flex-direction: column;
+    padding: 24px;
+  }
+  .form-row {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .hero {
+    padding: 70px 16px 20px;
+  }
 }

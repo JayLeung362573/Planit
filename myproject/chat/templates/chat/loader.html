@@ -5,33 +5,75 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Just a moment…</title>
-  <link rel="stylesheet" href="{% static 'chat/css/style.css' %}"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'chat/css/loader.css' %}" />
+  <link rel="icon" href="{% static 'chat/images/favicon.ico' %}">
   <style>
-    .spinner {
-      width: 60px; height: 60px;
-      border: 6px solid #eee;
-      border-top: 6px solid #007bff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 100px auto;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      color: #555;
-    }
   </style>
 </head>
 <body>
-  <div class="spinner"></div>
-  <p class="loading-text">Generating your schedule…</p>
+  <div class="hero">
+    <div class="loader">
+      <div class="box box-1">
+        <div class="side-left"></div>
+        <div class="side-right"></div>
+        <div class="side-top"></div>
+      </div>
+      <div class="box box-2">
+        <div class="side-left"></div>
+        <div class="side-right"></div>
+        <div class="side-top"></div>
+      </div>
+      <div class="box box-3">
+        <div class="side-left"></div>
+        <div class="side-right"></div>
+        <div class="side-top"></div>
+      </div>
+      <div class="box box-4">
+        <div class="side-left"></div>
+        <div class="side-right"></div>
+        <div class="side-top"></div>
+      </div>
+    </div>
 
+    <div class="loader-message" aria-live="polite">
+      <span>Generating schedule…</span>
+      <span>Looking for great spots…</span>
+      <span>Fetching weather data…</span>
+      <span>Optimizing your itinerary…</span>
+      <span>Almost there…</span>
+    </div>
+
+    <div>
+      <button class="cancel-btn" id="cancel-btn">Cancel</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Cancelled</div>
+
+  <script src="{% static 'chat/js/loader.js' %}" defer></script>
   <script>
-    setTimeout(() => {
-      window.location.href = "{{ generate_url }}";
-    }, 100);
+    function showToast(message, duration = 2000) {
+      const t = document.getElementById('toast');
+      t.textContent = message;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), duration);
+    }
+
+    const cancelBtn = document.getElementById('cancel-btn');
+    cancelBtn.addEventListener('click', () => {
+      showToast('Cancelled generation');
+      setTimeout(() => {
+        window.location.href = '{% url "chat_view" %}';
+      }, 1000);
+    });
+
+    const target = "/gen/";
+    if (target) {
+      setTimeout(() => {
+        window.location.href = target;
+      }, 100);
+    }
   </script>
 </body>
 </html>

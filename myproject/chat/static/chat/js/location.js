@@ -1,3 +1,11 @@
+/*
+  schedule.js
+  - Handles the activity planning form:
+    • Autocomplete location input (OpenWeatherMap Geocoding API)
+    • Date picker (flatpickr)
+    • Fetch and inject hourly weather forecast
+    • Enable/disable prompt and send button based on validation
+*/
 document.addEventListener('DOMContentLoaded', () => {
   const form         = document.getElementById('plan-form');
   const locInput     = document.getElementById('location-input');
@@ -6,28 +14,70 @@ document.addEventListener('DOMContentLoaded', () => {
   const promptEl     = document.getElementById('prompt');
   const sendBtn      = document.getElementById('send-btn');
   const errDiv       = document.getElementById('error-msg');
-  const forecastDiv  = document.getElementById('hourly-forecast');
-  const hiddenHourly = document.getElementById('hourly-forecast-input');
+  const hourlyInput  = document.getElementById('hourly-forecast-input');
   const OWM_KEY      = window.OWM_KEY;
 
   let locationSelected = false;
   let dateSelected     = false;
   let currentCoords    = null;
-  let lastHourly       = [];
 
+  let validationTimer = null;
+
+  // On form submit: fetch hourly forecast then submit form
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (currentCoords) {
+      await updateHourlyInput(currentCoords.lat, currentCoords.lon);
+    }
+    form.submit();
+  });
+
+  // Prevent Enter key from submitting date input
   dateInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') e.preventDefault();
   });
 
+  // updatePromptState: toggle prompt and button based on validation
   function updatePromptState() {
-    dateSelected = !!dateInput.value && lastHourly.length > 0;
-    promptEl.disabled = sendBtn.disabled = !(locationSelected && dateSelected);
+    dateSelected = !!dateInput.value.trim();
+    const ready = locationSelected && dateSelected;
+
+    if (ready) {
+      promptEl.disabled = false;
+      promptEl.classList.remove('invalid');
+      promptEl.classList.add('valid');
+      errDiv.textContent = 'Ready to generate.';
+      errDiv.style.color = 'var(--accent-green)';
+    } else {
+      promptEl.disabled = true;
+      promptEl.classList.remove('valid');
+      promptEl.classList.add('invalid');
+      if (!locationSelected && !dateSelected) {
+        errDiv.textContent = 'Location and date are required.';
+      } else if (!locationSelected) {
+        errDiv.textContent = 'Location is required.';
+      } else if (!dateSelected) {
+        errDiv.textContent = 'Date is required.';
+      }
+      errDiv.style.color = '#ff6b6b';
+    }
+
+    sendBtn.disabled = !ready;
   }
 
+  // debouncedUpdate: debounce validation calls
+  function debouncedUpdate() {
+    clearTimeout(validationTimer);
+    validationTimer = setTimeout(updatePromptState, 120);
+  }
+
+  // clearSuggestions: hide and clear autocomplete list
   function clearSuggestions() {
     suggestions.innerHTML     = '';
     suggestions.style.display = 'none';
   }
+
+  // showSuggestions: render autocomplete items and handle selection
   function showSuggestions(list) {
     suggestions.innerHTML = list
       .map(t => `<div class="autocomplete-item">${t}</div>`)
@@ -38,13 +88,39 @@ document.addEventListener('DOMContentLoaded', () => {
         locInput.value        = item.textContent;
         locationSelected      = true;
         clearSuggestions();
-        geocodeAndForecast(item.textContent);
-        updatePromptState();
+        geocode(item.textContent);
+        debouncedUpdate();
       });
     });
   }
 
-  function geocodeAndForecast(q) {
+  // updateHourlyInput: fetch and slim hourly forecast from OpenWeatherMap Pro API
+  async function updateHourlyInput(lat, lon) {
+    try {
+      const url =
+        `https://pro.openweathermap.org/data/2.5/forecast/hourly` +
+        `?lat=${lat}&lon=${lon}` +
+        `&units=metric&appid=${OWM_KEY}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.statusText);
+      const data = await res.json();
+      const slim = Array.isArray(data.list)
+        ? data.list.map(h => ({
+            dt_txt:   h.dt_txt,
+            temp: h.main.temp,
+            icon: h.weather[0].icon,
+            description: h.weather[0].description
+          }))
+        : [];
+      hourlyInput.value = JSON.stringify(slim);
+    } catch (err) {
+      console.error('Error fetching hourly forecast:', err);
+      // leave [] if it fails
+    }
+  }  
+
+  // geocode: get coordinates for a location query and update hourly forecast
+  function geocode(q) {
     fetch(
       `https://api.openweathermap.org/geo/1.0/direct?` +
       `q=${encodeURIComponent(q)}&limit=1&appid=${OWM_KEY}`
@@ -52,17 +128,21 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(r => r.json())
       .then(arr => {
         if (!arr[0]) throw new Error('Not found');
-        currentCoords = { lat: arr[0].lat, lon: arr[0].lon };
-        renderForecast(arr[0].lat, arr[0].lon);
+        const lat = arr[0].lat, lon = arr[0].lon;
+        currentCoords = { lat, lon };
+        updateHourlyInput(lat, lon);
+        debouncedUpdate();
       })
       .catch(() => {
-        forecastDiv.innerHTML = '<p style="color:red;">Error fetching coords.</p>';
+        errDiv.textContent = 'Error fetching location.';
+        errDiv.style.color = '#ff6b6b';
       });
   }
 
+  // On location input: debounce, clear suggestions, fetch new suggestions
   locInput.addEventListener('input', () => {
     locationSelected = false;
-    updatePromptState();
+    debouncedUpdate();
     clearSuggestions();
     const q = locInput.value.trim();
     if (q.length < 2) return;
@@ -82,29 +162,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, 300);
   });
+
+  // Hide suggestions when clicking outside of input or suggestion box
   document.addEventListener('click', e => {
     if (e.target !== locInput && !suggestions.contains(e.target)) {
       clearSuggestions();
     }
   });
 
+  // Attempt to get user's current position and reverse geocode on load
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
+        const lat = coords.latitude, lon = coords.longitude;
+        currentCoords = { lat, lon };
+        updateHourlyInput(lat, lon);
         fetch(
           `https://api.openweathermap.org/geo/1.0/reverse?` +
-          `lat=${coords.latitude}&lon=${coords.longitude}` +
-          `&limit=1&appid=${OWM_KEY}`
+          `lat=${lat}&lon=${lon}&limit=1&appid=${OWM_KEY}`
         )
           .then(r => r.json())
           .then(data => {
+            if (!data[0]) return;
             const L = data[0];
-            const name = `${L.name}${L.state?`, ${L.state}`:''}, ${L.country}`;
-            locInput.value      = name;
-            locationSelected    = true;
-            currentCoords       = { lat: coords.latitude, lon: coords.longitude };
-            renderForecast(coords.latitude, coords.longitude);
-            updatePromptState();
+            locInput.value   = `${L.name}${L.state?`, ${L.state}`:''}, ${L.country}`;
+            locationSelected = true;
+            debouncedUpdate();
           });
       },
       () => { locInput.placeholder = 'Type to search location…'; }
@@ -113,15 +196,24 @@ document.addEventListener('DOMContentLoaded', () => {
     locInput.placeholder = 'Type to search location…';
   }
 
+  // Initialize flatpickr date picker if available
   if (typeof flatpickr === 'function') {
+    const today = new Date();
+    const maxDate = new Date();
+    maxDate.setDate(today.getDate() + 3);
+
     flatpickr(dateInput, {
       dateFormat: 'd/m/Y',
-      position:   'below',
-      minDate:    '2025-01-01',
+      position: 'below',
+      minDate: today,
+      maxDate: maxDate,
       clickOpens: true,
       allowInput: false,
+      onChange(_, __) {
+        debouncedUpdate();
+      },
       onReady(_, __, fp) {
-        const cal  = fp.calendarContainer;
+        const cal = fp.calendarContainer;
         let footer = cal.querySelector('.flatpickr-footer');
         if (!footer) {
           footer = document.createElement('div');
@@ -136,86 +228,28 @@ document.addEventListener('DOMContentLoaded', () => {
           b.addEventListener('click', () => {
             if (txt === 'Clear') {
               fp.clear();
-              lastHourly = [];
-              hiddenHourly.value = '';
+              dateInput.value = '';
             } else {
               fp.setDate(new Date(), true);
             }
-            updatePromptState();
+            debouncedUpdate();
             fp.close();
           });
           footer.appendChild(b);
         });
       },
-      onChange(_, __) {
-        updatePromptState();
-        if (locationSelected && dateInput.value && currentCoords) {
-          renderForecast(currentCoords.lat, currentCoords.lon);
-        }
+      disable: [
+      ],
+      onOpen() {
       }
     });
   } else {
     console.error('⚠️ flatpickr not loaded');
   }
 
-  function renderForecast(lat, lon) {
-    forecastDiv.innerHTML = '<p>Loading forecast…</p>';
-    fetch(
-      `https://pro.openweathermap.org/data/2.5/forecast/hourly?` +
-      `lat=${lat}&lon=${lon}&units=metric&appid=${OWM_KEY}`
-    )
-      .then(r => {
-        if (!r.ok) throw new Error(`OWM ${r.status}`);
-        return r.json();
-      })
-      .then(data => {
-        const [dd, mm, yy] = dateInput.value.split('/').map(Number);
-        const hours = data.list.filter(item => {
-          const d = new Date(item.dt * 1000);
-          return (
-            d.getFullYear() === yy &&
-            d.getMonth()+1   === mm &&
-            d.getDate()     === dd
-          );
-        });
-        lastHourly = hours;
-        hiddenHourly.value = JSON.stringify(hours);
-        if (!hours.length) {
-          forecastDiv.innerHTML = '<p>No hourly data for this date.</p>';
-          updatePromptState();
-          return;
-        }
-        updatePromptState();
-        const icons = {
-          '01d':'☀️','01n':'🌙','02d':'🌤️','02n':'☁️',
-          '03d':'☁️','03n':'☁️','04d':'☁️','04n':'☁️',
-          '09d':'🌧️','09n':'🌧️','10d':'🌦️','10n':'🌧️',
-          '11d':'⛈️','11n':'⛈️','13d':'❄️','13n':'❄️',
-          '50d':'🌫️','50n':'🌫️'
-        };
-        forecastDiv.innerHTML = `
-          <h2>Hourly for ${dd}/${mm}/${yy}</h2>
-          <div class="hourly-cards">
-            ${hours.map(h => {
-              const d  = new Date(h.dt*1000);
-              const hr = d.getHours();
-              const lbl= (hr%12||12)+(hr<12?' AM':' PM');
-              return `
-                <div class="hourly-card">
-                  <div class="hour-label">${lbl}</div>
-                  <div class="hour-emoji">${icons[h.weather[0].icon]||''}</div>
-                  <div class="hour-temp">${Math.round(h.main.temp)}°C</div>
-                  <div class="hour-desc">${h.weather[0].description}</div>
-                </div>`;
-            }).join('')}
-          </div>`;
-      })
-      .catch(err => {
-        console.error(err);
-        forecastDiv.innerHTML = `<p style="color:red;">Error:<br>${err.message}</p>`;
-      });
-  }
-
+  // Reset initial state and validate
   dateInput.value = '';
+  promptEl.disabled = true;
+  sendBtn.disabled = true;
   updatePromptState();
 });

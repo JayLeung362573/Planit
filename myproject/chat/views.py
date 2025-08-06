@@ -76,11 +76,11 @@ def generate_view(request):
 
     # 2) Fetch 30 POIs via Text Search
     categories = (
-        "popular tourist attractions, museums and restaurants"
+        "tourist attractions, restaurants and museums"
     )
     text_query = f"{categories} in {location}"
     try:
-        places = text_search_places(text_query, max_results=30)
+        places = text_search_places(text_query, max_results=20)
     except TypeError:
         places = text_search_places(text_query)
     except requests.RequestException:
@@ -143,6 +143,9 @@ def schedule_view(request):
     date_str      = request.session.pop("date", "")
     prompt        = request.session.pop("prompt", "")
 
+    for act in activities:
+        act['expected_weather_code'] = act.get('weather_icon', '')
+
     return render(request, "chat/schedule.html", {
         "combined_json": combined_json,
         "activities":    activities,
@@ -204,3 +207,7 @@ def helper_view(request):
     raw = ask_assistant(settings.HELPER_ASSISTANT_ID, payload)
     # assume raw is plain text reply
     return JsonResponse({"reply": raw.strip()})
+
+def weather_view(request):
+    owm_key = settings.OWM_KEY
+    return render(request, "chat/weather.html", {"owm_key": owm_key})

@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather Overview</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'chat/css/weather.css' %}" />
+  <link rel="icon" href="{% static 'chat/images/favicon.ico' %}">
+  <script>
+    window.OWM_KEY = "{{ owm_key|escapejs }}";
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{% url 'chat_view' %}" class="logo">PLAN IT</a>
+    <ul class="nav-links">
+      <li><a href="{% url 'chat_view' %}">Generate</a></li>
+      <li><a href="{% url 'schedule_view' %}">My Schedule</a></li>
+      <li><a href="{% url 'weather_view' %}">Weather</a></li>
+      <li><a href="https://github.com/CMPT-276-SUMMER-2025/final-project-13-bays" target="_blank" rel="noopener noreferrer"> GitHub Repo</a>
+    </ul>
+  </nav>
+  <div class="hero">
+    <div class="container">
+      <div class="location-row">
+        <div class="input-wrapper">
+          <label for="location-input">Location</label>
+          <div class="autocomplete">
+            <input
+              type="text"
+              id="location-input"
+              placeholder="e.g. Vancouver"
+              autocomplete="off"
+              aria-label="Location"
+            />
+            <div id="location-suggestions" class="autocomplete-items"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-summary">
+        <div class="current-box">
+          <div class="current-temp" id="current-temp">
+            <span id="temp-value">--</span><sup>°C</sup>
+          </div>
+          <div class="current-info">
+            <div class="weather-title">Weather</div>
+            <div class="weather-sub" id="current-desc">Waiting for location…</div>
+            <div class="details">
+              <div class="detail-item"><strong id="day-name">—</strong></div>
+              <div class="detail-item"><span id="feels-like">Feels like: --°C</span></div>
+              <div class="detail-item"><span id="humidity">Humidity: --%</span></div>
+              <div class="detail-item"><span id="wind">Wind: -- km/h</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hourly-section">
+        <div class="hourly-header">
+          <h2>Temperature</h2>
+          <div class="sub-label">Hourly for today</div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="hourly-chart" class="hourly-canvas" aria-label="Hourly temperature chart" role="img"></canvas>
+          <div id="chart-tooltip" class="chart-tooltip"></div>
+        </div>
+        <div class="hours-list" id="hours-list"></div>
+      </div>
+
+      <div class="multi-day" id="forecast-4day"></div>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay" aria-live="polite">
+      <div class="spinner"></div>
+      <div class="loading-text">Fetching weather data…</div>
+    </div>
+  </div>  
+  <script src="{% static 'chat/js/weather.js' %}"></script>
+</body>
+</html>

@@ -2,69 +2,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Plan Your Day</title>
-
-  <!-- Flatpickr CSS -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
-  />
-  <!-- Main styles -->
-  <link rel="stylesheet" href="{% static 'chat/css/style.css' %}"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="{% static 'chat/images/favicon.ico' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <link rel="stylesheet" href="{% static 'chat/css/style.css' %}" />
 </head>
 <body>
-  <h1>Plan Your Day</h1>
+  <nav class="navbar">
+    <a href="{% url 'chat_view' %}" class="logo">PLAN IT</a>
+    <ul class="nav-links">
+      <li><a href="{% url 'chat_view' %}">Generate</a></li>
+      <li><a href="{% url 'schedule_view' %}">My Schedule</a></li>
+      <li><a href="{% url 'weather_view' %}">Weather</a></li>
+      <li><a href="https://github.com/CMPT-276-SUMMER-2025/final-project-13-bays" target="_blank" rel="noopener noreferrer"> GitHub Repo</a>
+</li>
+    </ul>
+  </nav>
 
-  <form id="plan-form"
-        method="post"
-        action="{% url 'loader_view' %}">
-    {% csrf_token %}
+  <section class="hero">
+    <div class="container">
+      <div class="currently" aria-hidden="true" style="display:none;">
+      </div>
 
-    <label for="location-input">Location:</label>
-    <div class="autocomplete">
-      <input
-        type="text"
-        id="location-input"
-        name="location"
-        placeholder="Detecting location…"
-        autocomplete="off"
-      />
-      <div id="location-suggestions" class="autocomplete-items"></div>
+      <div class="title">
+        <h1 id="main-title">Plan it</h1>
+      </div>
+      <div class="subtitles">
+        <h2 class="sub-first">Your AI-powered travel companion.</h2>
+      </div>
+      <div class="subtitles">
+        <h2 class="sub-first">Personalized itineraries based on live weather</h2>
+      </div>
+
+      <form id="plan-form" method="post" action="{% url 'loader_view' %}">
+        {% csrf_token %}
+
+        <div class="form-row">
+          <div class="input-wrapper">
+            <label for="location-input">Location</label>
+            <div class="autocomplete" style="position: relative;">
+              <input
+                type="text"
+                id="location-input"
+                name="location"
+                placeholder="e.g. Vancouver"
+                autocomplete="off"
+                required
+              />
+              <div id="location-suggestions" class="autocomplete-items"></div>
+            </div>
+          </div>
+
+          <div class="input-wrapper">
+            <label for="date-input">Date</label>
+            <input
+              type="text"
+              id="date-input"
+              name="date"
+              placeholder="DD/MM/YYYY"
+              autocomplete="off"
+              required
+            />
+          </div>
+        </div>
+
+        <div id="prompt-wrapper" class="input-wrapper">
+          <label for="prompt">Preferences (e.g. “outdoorsy, cheap, 3 activities”)</label>
+          <textarea
+            id="prompt"
+            name="prompt"
+            rows="2"
+            placeholder="I want 4 outdoorsy activities for a family"
+          ></textarea>
+        </div>
+
+        <input type="hidden" id="hourly-forecast-input" name="hourly_forecast_input" value="" />
+
+        <div id="error-msg" class="error-msg"></div>
+
+        <div class="generate-wrapper">
+          <button id="send-btn" type="submit" disabled>
+            <span class="button-content">Generate</span>
+          </button>
+        </div>
+      </form>
     </div>
-
-    <label for="date-input">Date:</label>
-    <input
-      type="text"
-      id="date-input"
-      name="date"
-      placeholder="DD/MM/YYYY"
-      autocomplete="off"
-    />
-
-    <input
-      type="hidden"
-      id="hourly-forecast-input"
-      name="hourly_forecast_input"
-      value=""
-    />
-
-    <label for="prompt">Preferences (e.g. “outdoorsy, cheap, 3 activities”):</label>
-    <textarea
-      id="prompt"
-      name="prompt"
-      rows="3"
-      placeholder="e.g. I want 4 outdoorsy activities for a family"
-      disabled
-    ></textarea>
-
-    <div id="error-msg" class="error-msg"></div>
-    <button id="send-btn" type="submit" disabled>Generate Schedule</button>
-  </form>
-
-  <div id="hourly-forecast" class="hourly-forecast"></div>
+  </section>
 
   <script>window.OWM_KEY = "{{ owm_key|escapejs }}";</script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
