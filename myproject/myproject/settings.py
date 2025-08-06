@@ -34,7 +34,7 @@ HELPER_ASSISTANT_ID = os.getenv("HELPER_ASSISTANT_ID")
 SECRET_KEY = 'django-insecure-l8*4h^!&=8azo)po)xrr#o!qa9!j9itefy&225ig-o0t#d3f@q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'myapp-wioh.onrender.com']
 
