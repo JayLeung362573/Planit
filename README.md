@@ -48,13 +48,15 @@ Follow these steps to deploy Planit locally. If any step fails, please double-ch
 - pip install --upgrade pip
 - pip install -r requirements.txt
 
-
+## Environment Variables
 4. **Configure environment variables**  
 - Open `.env` in a text editor and add:  
   - `SECRET_KEY` (Django secret)  
   - `DATABASE_URL` (if not using SQLite)  
   - `OWM_KEY` (OpenWeatherMap API key)  
   - `OPENAI_API_KEY` (OpenAI client key)
+
+## Running the Development Server
 
 5. **Apply database migrations**
 - python manage.py migrate
