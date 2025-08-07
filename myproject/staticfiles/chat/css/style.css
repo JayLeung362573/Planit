@@ -1,0 +1,588 @@
+/* ============================== */
+/* style.css - Clean Dark Neon UI with refined Flatpickr */
+/* ============================== */
+
+/* ---- Theme Variables ---- */
+:root {
+  --bg: #000000;
+  --text-primary: #f5f7ff;
+  --text-secondary: #bfc4d9;
+  --text-muted: #7a7c9c;
+
+  --accent-green: #b3ff33;
+  --accent-purple: #7c5cff;
+  --accent-light: #a68cff;
+
+  --input-bg: #1a1a2f;
+  --radius: 14px;
+
+  --border-light: rgba(255,255,255,0.06);
+  --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Reset / Base ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover {
+  color: var(--accent-light);
+}
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+/* ---- Utilities ---- */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============================== */
+/* Navbar                        */
+/* ============================== */
+.navbar {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* logo left, links fill rest */
+  padding: 0 1rem;
+  height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.logo {
+  font-weight: 900;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  color: var(--accent-green);
+  text-decoration: none;
+  margin-right: 2rem; /* give links some breathing room */
+}
+
+.nav-links {
+  font-size: 1.4rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  list-style: none;
+  justify-content: space-evenly;
+  padding: 0;
+  display: flex;
+  flex: 1;                       /* take up all leftover space */ /* spread links evenly */
+  align-items: center;
+}
+
+.nav-links a {
+  position: relative;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 10px 6px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color .3s;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent-purple);
+  transition: all .3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-purple);
+}
+
+.nav-links a:hover::after {
+  left: 0;
+  width: 100%;                  /* underline grows from center to edges */
+}
+
+
+
+/* ============================== */
+/* Hero / Header                 */
+/* ============================== */
+.hero {
+  padding: 100px 16px 10px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title {
+  max-width: 800px;
+  margin: 0 auto 10px; /* tighter grouping with subtitles, some gap before form */
+}
+#main-title {
+  font-size: clamp(2.5rem, 6vw, 3.6rem);
+  font-weight: 800;
+  margin: 0 0 2px;
+  line-height: 1.05;
+  color: var(--text-primary);
+  letter-spacing: .5px;
+}
+.subtitles {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 0;
+  text-align: center;
+}
+.sub-first {
+  font-weight: 400;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0 4px;
+}
+
+/* ============================== */
+/* Form                          */
+/* ============================== */
+#plan-form {
+  margin: 30px auto 0;
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 36px 32px;
+  background: transparent;
+  border-radius: 16px;
+  position: relative;
+  border: 1px solid var(--border-light);
+  backdrop-filter: blur(2px);
+}
+#plan-form label {
+  display: block;
+  font-size: .65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.form-row {
+  display: flex;
+  gap: 26px;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+.input-wrapper {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+input[type="text"],
+textarea {
+  background: var(--input-bg);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 16px 18px;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border var(--transition), box-shadow var(--transition);
+  font-family: inherit;
+  resize: vertical;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  font-style: italic;
+}
+input:focus,
+textarea:focus,
+#send-btn:focus {
+  outline: none;
+}
+
+#prompt-wrapper textarea {
+  min-height: 140px;
+}
+
+/* Validation states */
+#prompt {
+  background: #1a1a2f;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: border var(--transition), background var(--transition);
+  color: var(--text-primary);
+}
+#prompt.invalid {
+  border: 1px solid #ff6b6b;
+  background: rgba(255,107,107,0.06);
+}
+#prompt.valid {
+  border: 1px solid var(--accent-green);
+  background: rgba(179,255,51,0.05);
+}
+.prompt-hint {
+  font-size: 0.75rem;
+  margin-top: 4px;
+  display: block;
+  color: var(--text-muted);
+}
+.prompt-hint.error {
+  color: #ff6b6b;
+}
+.prompt-hint.ok {
+  color: var(--accent-green);
+}
+
+/* Autocomplete dropdown */
+
+.autocomplete-items:empty {
+  display: none !important;
+  visibility: hidden;
+  height: 0;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.autocomplete-items {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #0f0f2f;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 40;
+}
+.autocomplete-items div {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: .9rem;
+  color: var(--text-primary);
+  transition: background var(--transition);
+}
+.autocomplete-items div:hover,
+.autocomplete-items .selected {
+  background: rgba(124,92,255,0.08);
+}
+
+/* Error message */
+#error-msg {
+  color: #ff6b6b;
+  font-size: .85rem;
+  margin-top: 4px;
+}
+
+/* ============================== */
+/* Generate Button               */
+/* ============================== */
+.generate-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+/* From Uiverse.io by Madflows, adapted to your existing selector */
+#send-btn,
+.button { /* keep the original class in case it's reused elsewhere */
+  position: relative;
+  overflow: hidden;
+  font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  height: 3rem;
+  padding: 0 2rem;
+  border-radius: 1.5rem;
+  background: black;
+  background-size: 400%;
+  color: #fff;
+  border: none;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15);
+  cursor: pointer;
+}
+
+#send-btn:hover::before,
+.button:hover::before {
+  transform: scaleX(1);
+}
+
+#send-btn .button-content,
+.button .button-content {
+  position: relative;
+  z-index: 1;
+}
+
+#send-btn::before,
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  width: 100%;
+  height: inherit;
+  border-radius: inherit;
+  background: linear-gradient(
+    rgba(150, 93, 233, 1) 10.8%,
+    rgba(99, 88, 238, 1) 94.3%
+  );
+  transition: all 0.475s;
+  pointer-events: none;
+}
+
+/* disabled state: no hover animation, no pointer, muted appearance */
+#send-btn:disabled,
+.button:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Prevent the gradient overlay from showing when disabled */
+#send-btn:disabled::before,
+.button:disabled::before {
+  transform: scaleX(0) !important;
+  transition: none;
+}
+
+/* Suppress hover-triggered transform or other effects when disabled */
+#send-btn:disabled:hover,
+.button:disabled:hover {
+  transform: none;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.15); /* keep the “border” look */
+}
+
+
+
+/* ============================== */
+/* Flatpickr refined styling ---- */
+/* ============================== */
+.flatpickr-calendar {
+  background: #1f1f2f !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 12px;
+  color: #f5f7ff;
+  font-family: inherit;
+  box-shadow: 0 40px 100px -10px rgba(124,92,255,0.35);
+  min-width: 260px;
+  padding: 0;
+}
+
+/* Header: month/year + nav */
+.flatpickr-months {
+  background: #1c1c2b;
+  padding: 14px 16px 8px;
+  position: relative;
+}
+.flatpickr-month {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.flatpickr-current-month,
+.flatpickr-current-month * {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #ffffff !important; /* force white for month/year */
+  text-transform: none;
+  letter-spacing: 0.5px;
+}
+.flatpickr-months .flatpickr-next-month,
+.flatpickr-months .flatpickr-prev-month {
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.flatpickr-months .flatpickr-next-month svg,
+.flatpickr-months .flatpickr-prev-month svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--accent-green);
+  stroke-width: 2;
+  fill: none;
+}
+.flatpickr-months .flatpickr-next-month:hover,
+.flatpickr-months .flatpickr-prev-month:hover {
+  background: rgba(179,255,51,0.15);
+}
+
+/* Weekday names */
+.flatpickr-weekdays {
+  background: transparent;
+  padding: 4px 0 2px;
+}
+.flatpickr-weekday {
+  color: #ffffff !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.65rem;
+  padding: 4px 0;
+}
+
+/* Days grid */
+.flatpickr-days {
+  padding: 6px 8px 12px;
+}
+.flatpickr-day {
+  background: transparent;
+  border-radius: 8px;
+  margin: 2px;
+  line-height: 1.2;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #d8dce8;
+  transition: background var(--transition), box-shadow var(--transition), color var(--transition);
+  position: relative;
+}
+
+/* Disabled/out-of-range days: visible but white (muted via opacity) */
+.flatpickr-day.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.02);
+}
+
+/* Hover on selectable */
+.flatpickr-day:hover:not(.disabled):not(.selected) {
+  background: rgba(179,255,51,0.08);
+}
+
+/* Today */
+.flatpickr-day.today {
+  outline: 2px solid var(--accent-green);
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Selected (solid neon green) */
+.flatpickr-day.selected {
+  background: var(--accent-green) !important;
+  color: #000 !important;
+  box-shadow: 0 0 18px rgba(179,255,51,0.7) !important;
+}
+
+/* Footer (Clear / Today) */
+.flatpickr-footer {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  justify-content: center;
+  background: #1c1c2b;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.flatpickr-footer button {
+  cursor: pointer;
+  background: transparent;
+  border: 2px solid var(--accent-green);
+  color: #f5f7ff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.flatpickr-footer button:hover {
+  background: rgba(179,255,51,0.15);
+  border-color: var(--accent-green);
+  transform: translateY(-1px);
+}
+
+/* ============================== */
+/* Spinner / System Status       */
+/* ============================== */
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 5px solid rgba(255,255,255,0.08);
+  border-top-color: var(--accent-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Accessibility ---- */
+:focus-visible {
+  outline: 2px solid var(--accent-purple);
+  outline-offset: 2px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+  #plan-form {
+    flex-direction: column;
+    padding: 24px;
+  }
+  .form-row {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .hero {
+    padding: 70px 16px 20px;
+  }
+}

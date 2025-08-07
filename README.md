@@ -43,15 +43,16 @@ Follow these steps to deploy Planit locally. If any step fails, please double-ch
 
 - Windows (PowerShell)
     python -m venv venv
-    .\venv\Scripts\Activate.ps1
+.\venv\Scripts\activate
 
 3. **Install Python dependencies**  
-- pip install --upgrade pip
+- python.exe -m pip install --upgrade pip
+- cd myproject
 - pip install -r requirements.txt
 
 ## Environment Variables
 4. **Configure environment variables**  
-- Open `.env` in a text editor and add:  
+- Open `.env` in a text editor and add it in the root folder "myproject":  
   - `SECRET_KEY` (Django secret)  
   - `DATABASE_URL` (if not using SQLite)  
   - `OWM_KEY` (OpenWeatherMap API key)  
