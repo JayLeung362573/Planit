@@ -12,8 +12,9 @@ Planit is a Django-based web application that assists users in planning their da
 2. [Local Deployment](#local-deployment)  
 3. [Environment Variables](#environment-variables)  
 4. [Running the Development Server](#running-the-development-server)  
-5. [Project Links](#project-links)  
-6. [Contact & Support](#contact--support)  
+5. [Testing](#testing)
+6. [Project Links](#project-links)  
+7. [Contact & Support](#contact--support)  
 
 ---
 
@@ -71,6 +72,13 @@ Follow these steps to deploy Planit locally. If any step fails, please double-ch
 8. **Verify in browser**  
 Visit `http://127.0.0.1:8000/` (or the URL shown in your console).
 
+## Testing
+To run the test program locally, follow steps 1-4 of local deployment. Once there, enter into your terminal
+- cd myproject
+- python manage.py test chat
+
+It should now start the program.
+
 ---
 
 ## Project Links
@@ -82,3 +90,4 @@ Visit `http://127.0.0.1:8000/` (or the URL shown in your console).
 
 ## Contact & Support
 If you encounter issues, please open an issue in this repository or contact one of the group members via email.
+
