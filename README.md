@@ -38,12 +38,12 @@ Follow these steps to deploy Planit locally. If any step fails, please double-ch
 
 2. **Create and activate a virtual environment**  
 - Linux / macOS
-    python3 -m venv venv
-    source venv/bin/activate
+    - python3 -m venv venv
+    - source venv/bin/activate
 
 - Windows (PowerShell)
-    python -m venv venv
-.\venv\Scripts\activate
+    - python -m venv venv
+    - .\venv\Scripts\activate
 
 3. **Install Python dependencies**  
 - python.exe -m pip install --upgrade pip
@@ -91,4 +91,5 @@ It should now start the program.
 
 ## Contact & Support
 If you encounter issues, please open an issue in this repository or contact one of the group members via email.
+
 
